@@ -142,7 +142,7 @@ open build/CalcYouLater.app
 
 ---
 
-## Allowing the App on Any Mac
+## Installing the App on a Mac
 
 | Scenario | Solution |
 |----------|----------|
