@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+
+    <title>CalcYouLater</title>
+    <background file="background.png" alignment="bottomleft" scaling="none"/>
+    <welcome    file="welcome.html"    mime-type="text/html"/>
+    <conclusion file="conclusion.html" mime-type="text/html"/>
+
+    <options customize="never" require-scripts="false" rootVolumeOnly="true"/>
+
+    <domains enable_localSystem="true"/>
+
+    <pkg-ref id="com.calcyoulater.app"/>
+
+    <choices-outline>
+        <line choice="com.calcyoulater.app"/>
+    </choices-outline>
+
+    <choice id="com.calcyoulater.app" visible="false">
+        <pkg-ref id="com.calcyoulater.app"/>
+    </choice>
+
+    <pkg-ref id="com.calcyoulater.app"
+             version="1.0"
+             onConclusion="none">CalcYouLater.pkg</pkg-ref>
+
+</installer-gui-script>

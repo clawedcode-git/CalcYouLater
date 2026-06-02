@@ -1,0 +1,7 @@
+#!/bin/bash
+# Remove quarantine flag so Gatekeeper doesn't block first launch
+xattr -dr com.apple.quarantine /Applications/CalcYouLater.app 2>/dev/null || true
+# Register with Launch Services
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \
+  -f /Applications/CalcYouLater.app 2>/dev/null || true
+exit 0

@@ -1,0 +1,278 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CYL0050 /* CalcYouLaterApp.swift in Sources */   = {isa = PBXBuildFile; fileRef = CYL0030; };
+		CYL0051 /* ContentView.swift in Sources */        = {isa = PBXBuildFile; fileRef = CYL0031; };
+		CYL0052 /* CalculatorEngine.swift in Sources */   = {isa = PBXBuildFile; fileRef = CYL0032; };
+		CYL0053 /* HistoryView.swift in Sources */        = {isa = PBXBuildFile; fileRef = CYL0033; };
+		CYL0054 /* ScientificKeypad.swift in Sources */   = {isa = PBXBuildFile; fileRef = CYL0034; };
+		CYL0055 /* ConverterView.swift in Sources */      = {isa = PBXBuildFile; fileRef = CYL0035; };
+		CYL0056 /* Assets.xcassets in Resources */        = {isa = PBXBuildFile; fileRef = CYL0036; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CYL0011 /* CalcYouLater.app */         = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalcYouLater.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CYL0030 /* CalcYouLaterApp.swift */    = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcYouLaterApp.swift; sourceTree = "<group>"; };
+		CYL0031 /* ContentView.swift */        = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CYL0032 /* CalculatorEngine.swift */   = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorEngine.swift; sourceTree = "<group>"; };
+		CYL0033 /* HistoryView.swift */        = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		CYL0034 /* ScientificKeypad.swift */   = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScientificKeypad.swift; sourceTree = "<group>"; };
+		CYL0035 /* ConverterView.swift */      = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterView.swift; sourceTree = "<group>"; };
+		CYL0036 /* Assets.xcassets */          = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CYL0022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CYL0002 /* Root Group */ = {
+			isa = PBXGroup;
+			children = (
+				CYL0004 /* CalcYouLater */,
+				CYL0003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CYL0003 /* Products */ = {
+			isa = PBXGroup;
+			children = ( CYL0011 /* CalcYouLater.app */ );
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CYL0004 /* CalcYouLater */ = {
+			isa = PBXGroup;
+			children = (
+				CYL0030 /* CalcYouLaterApp.swift */,
+				CYL0031 /* ContentView.swift */,
+				CYL0032 /* CalculatorEngine.swift */,
+				CYL0033 /* HistoryView.swift */,
+				CYL0034 /* ScientificKeypad.swift */,
+				CYL0035 /* ConverterView.swift */,
+				CYL0036 /* Assets.xcassets */,
+			);
+			path = CalcYouLater;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CYL0010 /* CalcYouLater */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CYL0074;
+			buildPhases = (
+				CYL0020 /* Sources */,
+				CYL0021 /* Resources */,
+				CYL0022 /* Frameworks */,
+			);
+			buildRules = ( );
+			dependencies = ( );
+			name = CalcYouLater;
+			productName = CalcYouLater;
+			productReference = CYL0011;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CYL0001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CYL0010 = { CreatedOnToolsVersion = 15.0; };
+				};
+			};
+			buildConfigurationList = CYL0075;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = ( en, Base );
+			mainGroup = CYL0002;
+			productRefGroup = CYL0003;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = ( CYL0010 );
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CYL0021 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( CYL0056 /* Assets.xcassets in Resources */ );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CYL0020 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CYL0050 /* CalcYouLaterApp.swift in Sources */,
+				CYL0051 /* ContentView.swift in Sources */,
+				CYL0052 /* CalculatorEngine.swift in Sources */,
+				CYL0053 /* HistoryView.swift in Sources */,
+				CYL0054 /* ScientificKeypad.swift in Sources */,
+				CYL0055 /* ConverterView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CYL0070 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableDescription = "The calculator that waits for you.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = ( "$(inherited)", "@executable_path/../Frameworks" );
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.calcyoulater.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CYL0071 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableDescription = "The calculator that waits for you.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = ( "$(inherited)", "@executable_path/../Frameworks" );
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.calcyoulater.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CYL0072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ( "DEBUG=1", "$(inherited)" );
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CYL0073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CYL0074 /* Build configuration list for PBXNativeTarget "CalcYouLater" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = ( CYL0070 /* Debug */, CYL0071 /* Release */ );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CYL0075 /* Build configuration list for PBXProject "CalcYouLater" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = ( CYL0072 /* Debug */, CYL0073 /* Release */ );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = CYL0001 /* Project object */;
+}
