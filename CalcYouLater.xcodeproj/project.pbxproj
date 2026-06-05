@@ -14,6 +14,7 @@
 		CYL0054 /* ScientificKeypad.swift in Sources */   = {isa = PBXBuildFile; fileRef = CYL0034; };
 		CYL0055 /* ConverterView.swift in Sources */      = {isa = PBXBuildFile; fileRef = CYL0035; };
 		CYL0056 /* Assets.xcassets in Resources */        = {isa = PBXBuildFile; fileRef = CYL0036; };
+		CYL0077 /* AppTheme.swift in Sources */           = {isa = PBXBuildFile; fileRef = CYL0076; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		CYL0034 /* ScientificKeypad.swift */   = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScientificKeypad.swift; sourceTree = "<group>"; };
 		CYL0035 /* ConverterView.swift */      = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterView.swift; sourceTree = "<group>"; };
 		CYL0036 /* Assets.xcassets */          = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CYL0076 /* AppTheme.swift */           = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				CYL0034 /* ScientificKeypad.swift */,
 				CYL0035 /* ConverterView.swift */,
 				CYL0036 /* Assets.xcassets */,
+				CYL0076 /* AppTheme.swift */,
 			);
 			path = CalcYouLater;
 			sourceTree = "<group>";
@@ -129,6 +132,7 @@
 				CYL0053 /* HistoryView.swift in Sources */,
 				CYL0054 /* ScientificKeypad.swift in Sources */,
 				CYL0055 /* ConverterView.swift in Sources */,
+				CYL0077 /* AppTheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

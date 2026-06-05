@@ -3,12 +3,12 @@ import SwiftUI
 // MARK: - Unit Data
 
 enum ConvCategory: String, CaseIterable, Identifiable {
-    case length = "Length"
-    case weight = "Weight"
+    case length      = "Length"
+    case weight      = "Weight"
     case temperature = "Temperature"
-    case area = "Area"
-    case volume = "Volume"
-    case speed = "Speed"
+    case area        = "Area"
+    case volume      = "Volume"
+    case speed       = "Speed"
     var id: String { rawValue }
 
     var icon: String {
@@ -38,16 +38,17 @@ enum ConvCategory: String, CaseIterable, Identifiable {
 
 struct ConverterView: View {
     @EnvironmentObject var engine: CalculatorEngine
+    @EnvironmentObject var theme:  AppTheme
     @State private var category: ConvCategory = .length
     @State private var fromUnit = "m"
-    @State private var toUnit = "ft"
-    @State private var input = ""
-    @State private var result = ""
+    @State private var toUnit   = "ft"
+    @State private var input    = ""
+    @State private var result   = ""
 
     var body: some View {
         VStack(spacing: 0) {
             header
-            Divider()
+            neonDivider
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     categoryPicker
@@ -58,17 +59,31 @@ struct ConverterView: View {
                 .padding(14)
             }
         }
-        .background(Color(NSColor.windowBackgroundColor))
-        .onChange(of: category)  { _ in resetUnits(); convert() }
-        .onChange(of: fromUnit)  { _ in convert() }
-        .onChange(of: toUnit)    { _ in convert() }
-        .onChange(of: input)     { _ in convert() }
+        .background(theme.sidebarBackground)
+        .onChange(of: category) { _ in resetUnits(); convert() }
+        .onChange(of: fromUnit) { _ in convert() }
+        .onChange(of: toUnit)   { _ in convert() }
+        .onChange(of: input)    { _ in convert() }
+    }
+
+    @ViewBuilder
+    private var neonDivider: some View {
+        if theme.isNeonBlade {
+            Rectangle()
+                .fill(theme.neonCyan.opacity(0.2))
+                .frame(height: 1)
+        } else {
+            Divider()
+        }
     }
 
     private var header: some View {
         HStack {
             Label("Convert", systemImage: "arrow.left.arrow.right")
-                .font(.headline)
+                .font(.system(.headline, design: theme.isNeonBlade ? .monospaced : .default))
+                .foregroundStyle(theme.isNeonBlade ? theme.neonCyan : Color.primary)
+                .shadow(color: theme.isNeonBlade ? theme.neonCyan.opacity(0.6) : .clear,
+                        radius: 5)
             Spacer()
         }
         .padding(.horizontal, 12)
@@ -77,7 +92,9 @@ struct ConverterView: View {
 
     private var categoryPicker: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Category").font(.caption).foregroundStyle(.secondary)
+            Text(theme.isNeonBlade ? "// CATEGORY" : "Category")
+                .font(.system(size: 11, design: theme.isNeonBlade ? .monospaced : .default))
+                .foregroundStyle(theme.secondaryText)
             Picker("", selection: $category) {
                 ForEach(ConvCategory.allCases) { cat in
                     Label(cat.rawValue, systemImage: cat.icon).tag(cat)
@@ -90,7 +107,9 @@ struct ConverterView: View {
 
     private var unitPickers: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Units").font(.caption).foregroundStyle(.secondary)
+            Text(theme.isNeonBlade ? "// UNITS" : "Units")
+                .font(.system(size: 11, design: theme.isNeonBlade ? .monospaced : .default))
+                .foregroundStyle(theme.secondaryText)
             HStack(spacing: 8) {
                 Picker("From", selection: $fromUnit) {
                     ForEach(category.units, id: \.self) { Text($0).tag($0) }
@@ -99,7 +118,7 @@ struct ConverterView: View {
                 .pickerStyle(.menu)
 
                 Image(systemName: "arrow.right")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.isNeonBlade ? theme.neonCyan.opacity(0.7) : Color.secondary)
 
                 Picker("To", selection: $toUnit) {
                     ForEach(category.units, id: \.self) { Text($0).tag($0) }
@@ -112,10 +131,13 @@ struct ConverterView: View {
 
     private var inputRow: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Value").font(.caption).foregroundStyle(.secondary)
+            Text(theme.isNeonBlade ? "// VALUE" : "Value")
+                .font(.system(size: 11, design: theme.isNeonBlade ? .monospaced : .default))
+                .foregroundStyle(theme.secondaryText)
             HStack(spacing: 6) {
                 TextField("Enter value", text: $input)
                     .textFieldStyle(.roundedBorder)
+                    .font(.system(size: 13, design: theme.isNeonBlade ? .monospaced : .default))
                 Button {
                     input = engine.display
                 } label: {
@@ -131,18 +153,31 @@ struct ConverterView: View {
 
     private var resultBox: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Result")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            Text(theme.isNeonBlade ? "// OUTPUT" : "Result")
+                .font(.system(size: 11, design: theme.isNeonBlade ? .monospaced : .default))
+                .foregroundStyle(theme.secondaryText)
             Text(result)
-                .font(.system(size: 22, weight: .semibold, design: .rounded))
+                .font(.system(size: 22, weight: .semibold,
+                              design: theme.isNeonBlade ? .monospaced : .rounded))
+                .foregroundStyle(theme.isNeonBlade ? theme.neonCyan : Color.primary)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
+                .shadow(
+                    color: theme.isNeonBlade ? theme.neonCyan.opacity(0.5) : .clear,
+                    radius: 5
+                )
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color(NSColor.controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(
+            theme.isNeonBlade
+                ? AnyView(CornerCutShape(cutSize: 10)
+                    .fill(theme.controlBackground)
+                    .overlay(CornerCutShape(cutSize: 10)
+                        .stroke(theme.neonCyan.opacity(0.35), lineWidth: 1)))
+                : AnyView(RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(NSColor.controlBackgroundColor)))
+        )
     }
 
     // MARK: - Conversion Logic
