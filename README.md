@@ -12,6 +12,7 @@
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-4-teal?logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
 [![Release](https://img.shields.io/badge/Release-v1.0-green)](../../releases/latest)
+[![NeonBlade](https://img.shields.io/badge/Theme-NeonBlade-%2300d4ff?logo=lightning&logoColor=white)](https://neonbladeui.neuronrush.com)
 
 A native calculator for **macOS and iOS/iPadOS** — scientific mode, history, unit converter, memory functions, keyboard support, and a witty name.
 
@@ -109,6 +110,33 @@ Six categories, 40+ units. Tap **←** (iOS) or **↓** (macOS) to pull the curr
 ### 🌗 Appearance
 System default · Light · Dark — persisted across launches
 
+### ⚡ NeonBlade Theme
+A full **cyberpunk / sci-fi** skin powered by the [NeonBlade UI](https://neonbladeui.neuronrush.com) aesthetic.
+
+<div align="center">
+
+| Standard Dark | NeonBlade |
+|:---:|:---:|
+| <img src="screenshots/standard_dark.png" width="280"/> | <img src="screenshots/neonblade.png" width="280"/> |
+
+</div>
+
+**Toggle:** Click the **`⚡`** bolt button in the toolbar, or press `⌘⇧T`
+
+| Element | NeonBlade Style |
+|---------|----------------|
+| Button shape | Diagonal **corner-cut** (blade geometry) |
+| Operators | Electric cyan `#00d4ff` with neon glow |
+| Equals | Hot pink `#ff0066` with neon glow |
+| Memory | Electric violet `#a020f0` |
+| Scientific | Electric blue `#0066ff` |
+| Window | Deep space `#080b14` |
+| Display | Scanline overlay · cyan border panel |
+| Fonts | Monospaced throughout — terminal aesthetic |
+| Hover | Glow intensifies + border brightens |
+
+Theme is **persistent** across launches and always forces **dark mode**.
+
 ---
 
 ## macOS Keyboard Shortcuts
@@ -179,7 +207,8 @@ open CalcYouLater-iOS/CalcYouLater-iOS.xcodeproj
 CalcYouLater/                        macOS Xcode project
 ├── CalcYouLater.xcodeproj/
 ├── CalcYouLater/
-│   ├── CalcYouLaterApp.swift        App entry · appearance binding
+│   ├── CalcYouLaterApp.swift        App entry · appearance & theme binding
+│   ├── AppTheme.swift               NeonBlade theme system · CornerCutShape · colors
 │   ├── CalculatorEngine.swift       All calculation logic (shared)
 │   ├── ContentView.swift            Main layout · keypad · keyboard handler
 │   ├── HistoryView.swift            History sidebar
@@ -213,5 +242,5 @@ MIT — do whatever you want, just don't remove the pun.
 ---
 
 <div align="center">
-<sub>Built with SwiftUI · macOS (Apple Silicon & Intel) · iOS / iPadOS (arm64) · No telemetry · No dependencies</sub>
+<sub>Built with SwiftUI · macOS (Apple Silicon & Intel) · iOS / iPadOS (arm64) · NeonBlade theme · No telemetry · No dependencies</sub>
 </div>
