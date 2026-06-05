@@ -160,10 +160,14 @@ Theme is **persistent** across launches and always forces **dark mode**.
 ### macOS — Installer package
 
 1. Download **`CalcYouLater_Installer.pkg`** from [Releases](../../releases/latest)
-2. Double-click and follow the on-screen installer — app lands in `/Applications`
-3. Open from Launchpad or Spotlight
+2. **Before opening**, strip the quarantine flag in Terminal:
+   ```bash
+   xattr -dr com.apple.quarantine ~/Downloads/CalcYouLater_Installer.pkg
+   ```
+3. Double-click the `.pkg` and follow the on-screen installer — app lands in `/Applications`
+4. Open from Launchpad or Spotlight
 
-> The installer removes the quarantine flag automatically, so the app opens with no Gatekeeper warning.
+> **Why the Terminal step?** CalcYouLater is ad-hoc signed (no paid Apple Developer ID), so macOS Gatekeeper shows a _"cannot be verified"_ warning on first open. The `xattr` command removes the quarantine attribute that triggers this. See the [Gatekeeper section](#-opening-on-any-mac-gatekeeper) below for all available options.
 
 ### iOS / iPadOS — Sideloading the IPA
 
@@ -190,14 +194,59 @@ open CalcYouLater-iOS/CalcYouLater-iOS.xcodeproj
 
 ---
 
-## Allowing the macOS App on Any Mac
+## 🔐 Opening on Any Mac (Gatekeeper)
 
-| Scenario | Solution |
-|----------|----------|
-| Installed via `.pkg` | ✅ Works — quarantine removed by installer |
-| Copied `.app` directly | Right-click → **Open** → click **Open** in dialog |
-| Terminal override | `xattr -dr com.apple.quarantine /Applications/CalcYouLater.app` |
-| Full Gatekeeper approval | Requires Apple Developer account + `xcrun notarytool` notarisation |
+CalcYouLater is **ad-hoc signed** — it does not carry a paid Apple Developer certificate. macOS Gatekeeper will show this warning when you first try to open the installer or the app:
+
+> *"CalcYouLater_Installer.pkg" Not Opened — Apple could not verify it is free of malware.*
+
+This is expected and safe to bypass. Choose any of the methods below:
+
+---
+
+### Option 1 — Terminal (recommended, one command)
+
+Run this **before** opening the installer or app:
+
+```bash
+# For the installer .pkg
+xattr -dr com.apple.quarantine ~/Downloads/CalcYouLater_Installer.pkg
+
+# For the .app after copying manually
+xattr -dr com.apple.quarantine /Applications/CalcYouLater.app
+```
+
+Then open normally. The warning will not appear again.
+
+---
+
+### Option 2 — Right-click to open
+
+1. **Right-click** (or Control-click) the `.pkg` or `.app`
+2. Choose **Open** from the context menu
+3. A new dialog appears — click **Open Anyway**
+
+---
+
+### Option 3 — System Settings
+
+1. Attempt to open the file — click **Done** (do **not** click "Move to Bin")
+2. Open **System Settings → Privacy & Security**
+3. Scroll to the **Security** section
+4. Click **Open Anyway** next to the CalcYouLater entry
+5. Authenticate with your password or Touch ID
+
+---
+
+### Why does this happen?
+
+| Cause | Explanation |
+|-------|-------------|
+| Ad-hoc signature | The app is signed with a local key (`codesign --sign -`), not an Apple-issued certificate |
+| No notarisation | Notarisation requires a $99/yr Apple Developer account and Apple's server-side scan |
+| Quarantine flag | macOS sets `com.apple.quarantine` on any file downloaded from the internet; `xattr -dr` removes it |
+
+> **For full Gatekeeper approval** (no warnings, anywhere): requires enrolling in the [Apple Developer Program](https://developer.apple.com/programs/) and notarising with `xcrun notarytool submit`.
 
 ---
 
