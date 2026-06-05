@@ -11,7 +11,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift&logoColor=white)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-4-teal?logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v1.0-green)](../../releases/latest)
+[![Release](https://img.shields.io/badge/Release-v1.1-green)](../../releases/latest)
 [![NeonBlade](https://img.shields.io/badge/Theme-NeonBlade-%2300d4ff?logo=lightning&logoColor=white)](https://neonbladeui.neuronrush.com)
 
 A native calculator for **macOS and iOS/iPadOS** — scientific mode, history, unit converter, memory functions, keyboard support, and a witty name.
