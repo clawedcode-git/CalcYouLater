@@ -191,11 +191,11 @@ struct ContentView: View {
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             }
         }
+        .id(theme.mode)                          // force full redraw on theme switch
         .background(theme.windowBackground)
         .animation(.easeInOut(duration: 0.22), value: showHistory)
         .animation(.easeInOut(duration: 0.22), value: showConverter)
         .animation(.easeInOut(duration: 0.22), value: isScientific)
-        .animation(.easeInOut(duration: 0.3),  value: theme.mode)
         .onAppear { setupKeyboard() }
         .onDisappear { teardownKeyboard() }
     }

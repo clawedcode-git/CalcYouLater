@@ -8,15 +8,16 @@
 
 [![macOS](https://img.shields.io/badge/macOS-13.0%2B-blue?logo=apple&logoColor=white)](https://developer.apple.com/macos/)
 [![iOS](https://img.shields.io/badge/iOS-16.0%2B-blue?logo=apple&logoColor=white)](https://developer.apple.com/ios/)
+[![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift&logoColor=white)](https://swift.org)
-[![SwiftUI](https://img.shields.io/badge/SwiftUI-4-teal?logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v1.1-green)](../../releases/latest)
+[![Release](https://img.shields.io/badge/Release-v1.2-green)](../../releases/latest)
 [![NeonBlade](https://img.shields.io/badge/Theme-NeonBlade-%2300d4ff?logo=lightning&logoColor=white)](https://neonbladeui.neuronrush.com)
 
-A native calculator for **macOS and iOS/iPadOS** — scientific mode, history, unit converter, memory functions, keyboard support, and a witty name.
+A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, history, unit converter, memory functions, keyboard support, and a witty name.
 
-[**⬇ macOS Installer (.pkg)**](../../releases/latest) · [**⬇ iOS (.ipa)**](../../releases/latest) · [**Report Bug**](../../issues)
+[**⬇ macOS Installer (.pkg)**](../../releases/latest) · [**⬇ iOS (.ipa)**](../../releases/latest) · [**⬇ Android (.apk)**](../../releases/latest) · [**Report Bug**](../../issues)
 
 </div>
 
@@ -29,8 +30,9 @@ A native calculator for **macOS and iOS/iPadOS** — scientific mode, history, u
 | **macOS** | `CalcYouLater_Installer.pkg` | macOS 13 Ventura+ | Double-click → follow installer |
 | **iOS / iPadOS** | `CalcYouLater-iOS.ipa` | iOS / iPadOS 16+ · arm64 | Sideload via AltStore or Sideloadly |
 | **iOS Source** | `CalcYouLater-iOS-src.zip` | Xcode 15+ | Open `.xcodeproj` → ⌘R |
+| **Android** | `CalcYouLater-Android.apk` | Android 8.0 Oreo+ (API 26) | Enable *Install unknown apps* → open the APK |
 
-→ All assets on the **[v1.0 Release page](../../releases/latest)**
+→ All assets on the **[latest Release page](../../releases/latest)**
 
 ---
 
@@ -72,7 +74,7 @@ A native calculator for **macOS and iOS/iPadOS** — scientific mode, history, u
 - Full arithmetic with **chained operations** and repeated `=`
 - Backspace, sign toggle, percentage
 - **Keyboard-first on macOS** — every key you'd expect works
-- **Haptic feedback on iOS** — tactile response on every tap
+- **Haptic feedback on iOS & Android** — tactile response on every tap
 
 ### 🔬 Scientific Mode
 Toggle **Sci** to reveal 16 functions:
@@ -192,6 +194,31 @@ open CalcYouLater-iOS/CalcYouLater-iOS.xcodeproj
 # Select your device → ⌘R
 ```
 
+### Android — Sideloading the APK
+
+The APK is **self-signed** (not from the Play Store), so Android asks you to allow installs from your browser/file manager the first time.
+
+1. Download **`CalcYouLater-Android.apk`** from [Releases](../../releases/latest) onto your phone
+2. Open it (Files app or your browser's downloads)
+3. When prompted, tap **Settings → Allow from this source** (or **Settings → Apps → Special access → Install unknown apps**), then go back
+4. Tap **Install** → **Open**
+
+> Requires **Android 8.0 (Oreo, API 26) or newer**. If Play Protect shows a warning, choose **Install anyway** — it flags any app not distributed through the Play Store.
+
+### Android — Build from source
+
+**Requires:** JDK 17 + Android SDK (API 34). No Android Studio needed — the Gradle wrapper is committed.
+
+```bash
+git clone https://github.com/clawedcode-git/CalcYouLater.git
+cd CalcYouLater/CalcYouLater-Android
+echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties   # path to your SDK
+./gradlew :app:assembleDebug        # debug APK
+./gradlew :app:testDebugUnitTest    # run engine unit tests
+```
+
+Output: `app/build/outputs/apk/debug/app-debug.apk`
+
 ---
 
 ## 🔐 Opening on Any Mac (Gatekeeper)
@@ -280,6 +307,18 @@ CalcYouLater-iOS/                    iOS / iPadOS Xcode project
     ├── ContentView.swift            Touch UI · portrait + landscape layouts
     ├── HistoryView.swift            History sheet
     └── ConverterView.swift          Converter sheet (Form-based)
+
+CalcYouLater-Android/                Android project (Jetpack Compose · Kotlin)
+├── app/build.gradle.kts            minSdk 26 · targetSdk 34 · Compose
+├── gradlew · gradle/wrapper/        Committed wrapper (Gradle 8.9)
+└── app/src/
+    ├── main/java/com/calcyoulater/android/
+    │   ├── MainActivity.kt          Activity · sets Compose content
+    │   ├── CalcViewModel.kt         State + DataStore persistence
+    │   ├── engine/                  Pure-Kotlin port of CalculatorEngine + Converter
+    │   ├── theme/                   ThemeMode · CornerCutShape · NeonBlade palette
+    │   └── ui/                      Display · keypads · toolbar · history/converter sheets
+    └── test/java/…/EngineTest.kt    JVM unit tests (engine + conversions)
 ```
 
 ---
@@ -291,5 +330,5 @@ MIT — do whatever you want, just don't remove the pun.
 ---
 
 <div align="center">
-<sub>Built with SwiftUI · macOS (Apple Silicon & Intel) · iOS / iPadOS (arm64) · NeonBlade theme · No telemetry · No dependencies</sub>
+<sub>Built with SwiftUI & Jetpack Compose · macOS (Apple Silicon & Intel) · iOS / iPadOS (arm64) · Android (API 26+) · NeonBlade theme · No telemetry</sub>
 </div>

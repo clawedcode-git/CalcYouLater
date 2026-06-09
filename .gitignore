@@ -5,3 +5,10 @@ dist/pkg-root/
 xcuserdata/
 DerivedData/
 *.ipa
+
+# Android — release artifacts & local config (distributed via GitHub Releases)
+CalcYouLater-Android.apk
+CalcYouLater-Android/.gradle/
+CalcYouLater-Android/local.properties
+CalcYouLater-Android/release.keystore
+CalcYouLater-Android/app/build/
