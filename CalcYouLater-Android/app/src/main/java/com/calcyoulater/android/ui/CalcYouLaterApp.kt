@@ -87,7 +87,7 @@ fun CalcYouLaterApp(vm: CalcViewModel) {
 private fun PortraitLayout(vm: CalcViewModel, onHistory: () -> Unit, onConverter: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(horizontal = 12.dp)) {
         Toolbar(vm, onHistory, onConverter)
-        Display(vm.state, vm::fmt, Modifier.padding(top = 6.dp, bottom = 4.dp))
+        Display(vm.state, vm::fmt, vm::backspace, Modifier.padding(top = 6.dp, bottom = 4.dp))
         if (vm.isScientific) {
             ScientificKeypad(vm, buttonHeight = 44.dp, modifier = Modifier.padding(vertical = 8.dp))
         }
@@ -109,7 +109,7 @@ private fun LandscapeLayout(vm: CalcViewModel, onHistory: () -> Unit, onConverte
         Row(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Display(vm.state, vm::fmt)
+                Display(vm.state, vm::fmt, vm::backspace)
             }
             if (vm.isScientific) {
                 Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()),
