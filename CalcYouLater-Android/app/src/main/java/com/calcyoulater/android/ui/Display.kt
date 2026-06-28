@@ -35,8 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.widget.Toast
 import com.calcyoulater.android.engine.EngineState
 import com.calcyoulater.android.theme.CornerCutShape
 import com.calcyoulater.android.theme.CylTheme
@@ -51,6 +53,7 @@ fun Display(
     val p = CylTheme.palette
     val clipboard = LocalClipboardManager.current
     val haptic = LocalHapticFeedback.current
+    val context = LocalContext.current
     val mono = p.isNeonBlade
 
     var container = modifier.fillMaxWidth()
@@ -89,7 +92,11 @@ fun Display(
             fontFamily = if (mono) FontFamily.Monospace else FontFamily.Default,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { clipboard.setText(AnnotatedString(state.display)) }
+                .clickable {
+                    clipboard.setText(AnnotatedString(state.display))
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    Toast.makeText(context, "Copied ${state.display}", Toast.LENGTH_SHORT).show()
+                }
         )
 
         // Memory indicator + backspace
