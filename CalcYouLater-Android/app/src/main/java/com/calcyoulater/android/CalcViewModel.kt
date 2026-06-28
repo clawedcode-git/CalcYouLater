@@ -91,6 +91,7 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
     fun memorySubtract() { engine.memorySubtract(); refresh(); persistMemory() }
     fun recallHistory(e: HistoryEntry) { engine.recallHistory(e); refresh() }
     fun clearHistory() { engine.clearHistory(); refresh(); persistHistory() }
+    fun deleteHistory(e: HistoryEntry) { engine.deleteHistory(e); refresh(); persistHistory() }
 
     fun fmt(v: Double): String = com.calcyoulater.android.engine.fmt(v)
 

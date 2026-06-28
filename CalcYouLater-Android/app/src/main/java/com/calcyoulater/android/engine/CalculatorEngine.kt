@@ -286,6 +286,9 @@ class CalculatorEngine {
 
     fun clearHistory() { history.clear() }
 
+    /** Remove a single history entry (parity with iOS/macOS swipe-to-delete). */
+    fun deleteHistory(entry: HistoryEntry) { history.removeAll { it.id == entry.id } }
+
     /** Restore persisted history (newest-first ordering preserved). */
     fun loadHistory(entries: List<HistoryEntry>) {
         history.clear()

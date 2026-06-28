@@ -128,6 +128,18 @@ class EngineTest {
         assertEquals("2", e.history.first().result)
     }
 
+    @Test fun deleteSingleHistoryEntry() {
+        val e = CalculatorEngine()
+        digits(e, "1"); e.inputOperator("+"); digits(e, "1"); e.equals()   // 1 + 1 = 2
+        digits(e, "2"); e.inputOperator("×"); digits(e, "3"); e.equals()   // 2 × 3 = 6
+        val before = e.history.size
+        val target = e.history.first()                                      // newest: result "6"
+        e.deleteHistory(target)
+        assertEquals(before - 1, e.history.size)
+        assertTrue(e.history.none { it.id == target.id })
+        assertEquals("2", e.history.first().result)                         // older entry remains
+    }
+
     @Test fun fmtEdgeCases() {
         assertEquals("Error", fmt(Double.NaN))
         assertEquals("∞", fmt(Double.POSITIVE_INFINITY))

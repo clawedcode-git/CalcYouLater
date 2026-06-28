@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -64,7 +68,11 @@ fun HistorySheet(vm: CalcViewModel, onRecall: () -> Unit) {
         } else {
             LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp)) {
                 items(history, key = { it.id }) { entry ->
-                    HistoryRow(entry, p) { vm.recallHistory(entry); onRecall() }
+                    HistoryRow(
+                        entry, p,
+                        onRecall = { vm.recallHistory(entry); onRecall() },
+                        onDelete = { vm.deleteHistory(entry) }
+                    )
                     Divider(color = p.tertiaryText.copy(alpha = 0.15f))
                 }
             }
@@ -73,30 +81,52 @@ fun HistorySheet(vm: CalcViewModel, onRecall: () -> Unit) {
 }
 
 @Composable
-private fun HistoryRow(entry: HistoryEntry, p: com.calcyoulater.android.theme.CylPalette, onClick: () -> Unit) {
-    Column(
-        Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.End
+private fun HistoryRow(
+    entry: HistoryEntry,
+    p: com.calcyoulater.android.theme.CylPalette,
+    onRecall: () -> Unit,
+    onDelete: () -> Unit
+) {
+    Row(
+        Modifier.fillMaxWidth().padding(start = 8.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            entry.expression,
-            color = if (p.isNeonBlade) p.neonCyan.copy(alpha = 0.65f) else p.secondaryText,
-            fontSize = 11.sp, fontFamily = FontFamily.Monospace,
-            maxLines = 1, overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            entry.result,
-            color = p.primaryText, fontSize = 17.sp, fontWeight = FontWeight.SemiBold,
-            fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default,
-            maxLines = 1, overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            timeFormat.format(Date(entry.timestamp)),
-            color = p.tertiaryText, fontSize = 10.sp,
-            fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default
-        )
+        // Per-entry delete (parity with iOS/macOS swipe-to-delete)
+        Box(
+            Modifier.size(32.dp).clickable { onDelete() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Filled.Close,
+                contentDescription = "Delete entry",
+                tint = if (p.isNeonBlade) p.neonPink.copy(alpha = 0.8f) else p.tertiaryText,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Column(
+            Modifier.weight(1f).clickable { onRecall() }.padding(vertical = 8.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(
+                entry.expression,
+                color = if (p.isNeonBlade) p.neonCyan.copy(alpha = 0.65f) else p.secondaryText,
+                fontSize = 11.sp, fontFamily = FontFamily.Monospace,
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                entry.result,
+                color = p.primaryText, fontSize = 17.sp, fontWeight = FontWeight.SemiBold,
+                fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default,
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                timeFormat.format(Date(entry.timestamp)),
+                color = p.tertiaryText, fontSize = 10.sp,
+                fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default
+            )
+        }
     }
 }
 

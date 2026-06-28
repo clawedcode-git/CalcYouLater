@@ -94,8 +94,8 @@ Toggle **Sci** to reveal 16 functions:
 ### 📋 History
 - Every calculation saved automatically (up to 200 entries)
 - **Tap any entry** to recall its result into the display
-- **Swipe to delete** individual entries · **Clear All** button
-- macOS: slide-in sidebar — iOS: native sheet
+- **Delete individual entries** (swipe on iOS/macOS · tap the **✕** on Android) · **Clear All** button
+- macOS: slide-in sidebar — iOS: native sheet — Android: bottom sheet
 
 ### ⇄ Unit Converter
 Six categories, 40+ units. Tap **←** (iOS) or **↓** (macOS) to pull the current display value directly in.
