@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +29,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -78,16 +82,11 @@ fun Display(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Main number — tap to copy (grouped for display; clipboard gets the raw value)
-        Text(
+        // Main number — auto-shrinks to fit (no ellipsis); tap to copy the raw value
+        AutoSizeNumber(
             text = com.calcyoulater.android.engine.groupThousands(state.display),
             color = p.primaryText,
-            fontSize = 52.sp,
-            fontWeight = FontWeight.Light,
             fontFamily = if (mono) FontFamily.Monospace else FontFamily.Default,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.End,
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { clipboard.setText(AnnotatedString(state.display)) }
@@ -113,6 +112,56 @@ fun Display(
                 onBackspace()
             }
         }
+    }
+}
+
+/**
+ * Right-aligned single-line number that shrinks its font (52sp → 22sp) until it fits the
+ * available width, instead of ellipsizing. Mirrors SwiftUI's `minimumScaleFactor`, so long
+ * results show every digit rather than being cut off with "…".
+ */
+@Composable
+private fun AutoSizeNumber(
+    text: String,
+    color: Color,
+    fontFamily: FontFamily,
+    modifier: Modifier = Modifier,
+    maxSp: Int = 52,
+    minSp: Int = 22
+) {
+    val measurer = rememberTextMeasurer()
+    BoxWithConstraints(modifier, contentAlignment = Alignment.CenterEnd) {
+        val maxWidthPx = constraints.maxWidth
+        val fontSize = remember(text, maxWidthPx, fontFamily) {
+            var sp = maxSp
+            while (sp > minSp) {
+                val w = measurer.measure(
+                    text = AnnotatedString(text),
+                    style = TextStyle(
+                        fontSize = sp.sp,
+                        fontWeight = FontWeight.Light,
+                        fontFamily = fontFamily
+                    ),
+                    maxLines = 1,
+                    softWrap = false
+                ).size.width
+                if (w <= maxWidthPx) break
+                sp -= 2
+            }
+            sp
+        }
+        Text(
+            text = text,
+            color = color,
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Light,
+            fontFamily = fontFamily,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
