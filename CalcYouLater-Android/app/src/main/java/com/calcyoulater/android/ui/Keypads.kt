@@ -1,18 +1,33 @@
 package com.calcyoulater.android.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.calcyoulater.android.CalcViewModel
+import com.calcyoulater.android.engine.AngleMode
 import com.calcyoulater.android.engine.EngineState
 import com.calcyoulater.android.theme.CalcButtonKind
+import com.calcyoulater.android.theme.CornerCutShape
 import com.calcyoulater.android.theme.CylTheme
 
 /** Standard 6-row keypad: memory row + AC/±/%/÷ … wide-0/./= */
@@ -92,6 +107,10 @@ fun ScientificKeypad(
         listOf(SK("xʸ", "xʸ", CalcButtonKind.SCIENTIFIC), SK("n!", "n!", CalcButtonKind.SCIENTIFIC), SK("1/x", "1/x", CalcButtonKind.SCIENTIFIC), SK("∛x", "cbrt", CalcButtonKind.SCIENTIFIC)),
     )
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(gap)) {
+        // DEG / RAD angle-mode toggle
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            AngleModeToggle(vm.angleMode) { vm.toggleAngleMode() }
+        }
         rows.forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
                 row.forEach { sk ->
@@ -105,5 +124,26 @@ fun ScientificKeypad(
                 }
             }
         }
+    }
+}
+
+/** Compact DEG/RAD switch shown above the scientific grid. */
+@Composable
+private fun AngleModeToggle(mode: AngleMode, onToggle: () -> Unit) {
+    val p = CylTheme.palette
+    val shape: Shape = if (p.isNeonBlade) CornerCutShape(5f) else RoundedCornerShape(6.dp)
+    val accent = if (p.isNeonBlade) p.neonBlue else p.scientificButton
+    var mod = Modifier
+        .background(if (p.isNeonBlade) accent.copy(alpha = 0.15f) else accent.copy(alpha = 0.18f), shape)
+    if (p.isNeonBlade) mod = mod.border(1.dp, accent.copy(alpha = 0.7f), shape)
+    mod = mod.clickable { onToggle() }.padding(horizontal = 10.dp, vertical = 4.dp)
+    Box(mod, contentAlignment = Alignment.Center) {
+        Text(
+            text = if (mode == AngleMode.DEG) "DEG" else "RAD",
+            color = if (p.isNeonBlade) p.neonBlue else p.primaryText,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default
+        )
     }
 }

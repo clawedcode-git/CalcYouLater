@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.calcyoulater.android.engine.AngleMode
 import com.calcyoulater.android.engine.CalculatorEngine
 import com.calcyoulater.android.engine.EngineState
 import com.calcyoulater.android.engine.HistoryEntry
@@ -30,6 +31,7 @@ private object Keys {
     val MEMORY = doublePreferencesKey("memory")
     val HAS_MEMORY = stringPreferencesKey("hasMemory")
     val HISTORY = stringPreferencesKey("history")
+    val ANGLE = stringPreferencesKey("angleMode")
 }
 
 /**
@@ -44,6 +46,7 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
     var themeMode by mutableStateOf(ThemeMode.STANDARD); private set
     var appearance by mutableStateOf(AppearanceMode.SYSTEM); private set
     var isScientific by mutableStateOf(false); private set
+    var angleMode by mutableStateOf(AngleMode.DEG); private set
 
     private var loaded = false
 
@@ -57,6 +60,8 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
                 else -> AppearanceMode.SYSTEM
             }
             isScientific = prefs[Keys.IS_SCI] == "true"
+            angleMode = if (prefs[Keys.ANGLE] == "RAD") AngleMode.RAD else AngleMode.DEG
+            engine.angleMode = angleMode
             val mem = prefs[Keys.MEMORY] ?: 0.0
             val hasMem = prefs[Keys.HAS_MEMORY] == "true"
             engine.restoreMemory(mem, hasMem)
@@ -72,7 +77,7 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
     fun digit(d: String) { engine.inputDigit(d); refresh() }
     fun decimal() { engine.inputDecimal(); refresh() }
     fun backspace() { engine.backspace(); refresh() }
-    fun op(o: String) { engine.inputOperator(o); refresh() }
+    fun op(o: String) { engine.inputOperator(o); refresh(); persistHistory() }
     fun equals() { engine.equals(); refresh(); persistHistory() }
     fun clear() { engine.clear(); refresh() }
     fun allClear() { engine.allClear(); refresh() }
@@ -103,6 +108,12 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
     fun toggleScientific() {
         isScientific = !isScientific
         persist(Keys.IS_SCI, isScientific.toString())
+    }
+
+    fun toggleAngleMode() {
+        angleMode = if (angleMode == AngleMode.DEG) AngleMode.RAD else AngleMode.DEG
+        engine.angleMode = angleMode
+        persist(Keys.ANGLE, angleMode.name)
     }
 
     // ── Persistence helpers ──────────────────────────────────────

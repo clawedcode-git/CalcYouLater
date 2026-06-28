@@ -28,6 +28,9 @@ data class EngineState(
     val clearLabel: String
 )
 
+/** Angle unit for trigonometric functions. */
+enum class AngleMode { DEG, RAD }
+
 /**
  * Pure-Kotlin port of CalculatorEngine.swift. No Android / Compose dependencies,
  * so it is fully unit-testable on the JVM. The UI wraps this via a ViewModel and
@@ -43,6 +46,9 @@ class CalculatorEngine {
     val history: MutableList<HistoryEntry> = mutableListOf()
     var memory: Double = 0.0; private set
     var hasMemory: Boolean = false; private set
+
+    /** Trig angle unit. Inputs to sin/cos/tan and outputs of asin/acos/atan honor this. */
+    var angleMode: AngleMode = AngleMode.DEG
 
     private var leftOperand: Double? = null
     private var pendingOperator: String? = null
@@ -217,13 +223,16 @@ class CalculatorEngine {
 
     fun applyScientific(fn: String) {
         val v = displayValue
+        // In DEG mode convert degrees↔radians; in RAD mode use values as-is.
+        val toRad = if (angleMode == AngleMode.DEG) PI / 180 else 1.0
+        val fromRad = if (angleMode == AngleMode.DEG) 180 / PI else 1.0
         val result: Double = when (fn) {
-            "sin" -> sin(v * PI / 180)
-            "cos" -> cos(v * PI / 180)
-            "tan" -> tan(v * PI / 180)
-            "asin" -> asin(v) * 180 / PI
-            "acos" -> acos(v) * 180 / PI
-            "atan" -> atan(v) * 180 / PI
+            "sin" -> sin(v * toRad)
+            "cos" -> cos(v * toRad)
+            "tan" -> tan(v * toRad)
+            "asin" -> asin(v) * fromRad
+            "acos" -> acos(v) * fromRad
+            "atan" -> atan(v) * fromRad
             "log" -> log10(v)
             "ln" -> ln(v)
             "sqrt" -> sqrt(v)

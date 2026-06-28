@@ -70,6 +70,33 @@ class EngineTest {
         assertEquals("1", e.display)
     }
 
+    @Test fun trigRadians() {
+        val e = CalculatorEngine()
+        e.angleMode = com.calcyoulater.android.engine.AngleMode.RAD
+        // sin(0) = 0 in radians
+        digits(e, "0"); e.applyScientific("sin")
+        assertEquals("0", e.display)
+        // asin(1) = π/2 ≈ 1.570796327 in radians
+        e.allClear()
+        digits(e, "1"); e.applyScientific("asin")
+        assertEquals(1.5707963, e.display.toDouble(), 1e-6)
+    }
+
+    @Test fun trigModeIsHonored() {
+        val e = CalculatorEngine()
+        // 90 rad is NOT 1; only 90 deg sin == 1
+        e.angleMode = com.calcyoulater.android.engine.AngleMode.RAD
+        digits(e, "90"); e.applyScientific("sin")
+        org.junit.Assert.assertNotEquals("1", e.display)
+    }
+
+    @Test fun chainedOpRecordsHistory() {
+        // 5 + 3 × should record the intermediate "5 + 3 = 8" in history
+        val e = CalculatorEngine()
+        digits(e, "5"); e.inputOperator("+"); digits(e, "3"); e.inputOperator("×")
+        assertEquals("8", e.history.first().result)
+    }
+
     @Test fun sqrtAndSquare() {
         val e = CalculatorEngine()
         digits(e, "9"); e.applyScientific("sqrt"); assertEquals("3", e.display)

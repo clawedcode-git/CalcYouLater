@@ -89,6 +89,8 @@ Toggle **Sci** to reveal 16 functions:
 
 > **On iOS in landscape**, the scientific panel appears as a permanent left column — no toggle needed.
 
+**On Android**, a **`DEG` / `RAD`** toggle above the scientific grid switches the angle unit for trig functions — the choice is remembered across launches.
+
 ### 📋 History
 - Every calculation saved automatically (up to 200 entries)
 - **Tap any entry** to recall its result into the display
