@@ -100,7 +100,7 @@ Toggle **Sci** to reveal 16 functions:
 - macOS: slide-in sidebar — iOS: native sheet — Android: bottom sheet
 
 ### ⇄ Unit Converter
-Six categories, 40+ units. Tap **←** (iOS) or **↓** (macOS) to pull the current display value directly in.
+Six categories, 40+ units. Tap **←** (iOS) or **↓** (macOS) to pull the current display value directly in. On **Android**, tap **↓ use display** to pull the value and the **⇄** button between the unit pickers to swap *from* and *to* instantly.
 
 | Category | Units |
 |----------|-------|

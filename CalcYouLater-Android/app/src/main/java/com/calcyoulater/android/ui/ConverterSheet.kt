@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -76,8 +77,18 @@ fun ConverterSheet(vm: CalcViewModel) {
             Box(Modifier.weight(1f)) {
                 DropdownPicker(current = fromUnit, options = category.units) { fromUnit = category.units[it] }
             }
-            Icon(Icons.Filled.ArrowForward, contentDescription = null,
-                tint = if (p.isNeonBlade) p.neonCyan.copy(alpha = 0.7f) else p.secondaryText)
+            // Tap to swap From ⇄ To
+            Box(
+                Modifier.size(32.dp).clickable {
+                    val tmp = fromUnit; fromUnit = toUnit; toUnit = tmp
+                },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Filled.SwapHoriz, contentDescription = "Swap units",
+                    tint = if (p.isNeonBlade) p.neonCyan else p.operatorButton
+                )
+            }
             Box(Modifier.weight(1f)) {
                 DropdownPicker(current = toUnit, options = category.units) { toUnit = category.units[it] }
             }
