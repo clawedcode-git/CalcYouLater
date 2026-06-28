@@ -31,6 +31,35 @@ fun fmt(value: Double): String {
     return trimG(String.format(Locale.US, "%.10g", value))
 }
 
+/**
+ * Insert thousands separators into the integer part of a display string, for rendering only.
+ * Leaves scientific notation, "Error", and "∞" untouched, and preserves a trailing decimal
+ * point and fractional digits exactly (the fractional part is never grouped).
+ *
+ * The engine stores the ungrouped value; this is a pure display transform, and
+ * [CalculatorEngine.displayValue] strips commas as a safety net.
+ */
+fun groupThousands(s: String): String {
+    if (s.isEmpty()) return s
+    if (s.any { it == 'E' || it == 'e' } || s.contains('∞') ||
+        s.contains("Error") || s.contains("Infinity")) return s
+
+    val neg = s.startsWith("-")
+    val core = if (neg) s.substring(1) else s
+    val dot = core.indexOf('.')
+    val intPart = if (dot >= 0) core.substring(0, dot) else core
+    val rest = if (dot >= 0) core.substring(dot) else ""   // includes the '.'
+    if (intPart.isEmpty() || !intPart.all { it.isDigit() }) return s
+
+    val grouped = StringBuilder()
+    val n = intPart.length
+    for (i in 0 until n) {
+        if (i > 0 && (n - i) % 3 == 0) grouped.append(',')
+        grouped.append(intPart[i])
+    }
+    return (if (neg) "-" else "") + grouped + rest
+}
+
 /** Scientific notation with 8 significant digits, e.g. "1.2345678E15". */
 private fun scientific(value: Double): String {
     // %.7e gives 7 digits after the point = 8 significant digits total.

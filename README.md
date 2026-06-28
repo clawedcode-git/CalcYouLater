@@ -73,6 +73,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 ### 🧮 Calculator Core
 - Full arithmetic with **chained operations** and repeated `=`
 - Backspace, sign toggle, percentage
+- **Thousands separators** on Android — large numbers read as `1,234,567` (copy still yields the raw value)
 - **Keyboard-first on macOS** — every key you'd expect works
 - **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing
 - **Haptic feedback on iOS & Android** — tactile response on every tap

@@ -78,9 +78,9 @@ fun Display(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Main number — tap to copy
+        // Main number — tap to copy (grouped for display; clipboard gets the raw value)
         Text(
-            text = state.display,
+            text = com.calcyoulater.android.engine.groupThousands(state.display),
             color = p.primaryText,
             fontSize = 52.sp,
             fontWeight = FontWeight.Light,

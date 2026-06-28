@@ -4,6 +4,7 @@ import com.calcyoulater.android.engine.CalculatorEngine
 import com.calcyoulater.android.engine.ConvCategory
 import com.calcyoulater.android.engine.Converter
 import com.calcyoulater.android.engine.fmt
+import com.calcyoulater.android.engine.groupThousands
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -138,6 +139,18 @@ class EngineTest {
         assertEquals(before - 1, e.history.size)
         assertTrue(e.history.none { it.id == target.id })
         assertEquals("2", e.history.first().result)                         // older entry remains
+    }
+
+    @Test fun thousandsGrouping() {
+        assertEquals("1,000,000", groupThousands("1000000"))
+        assertEquals("999", groupThousands("999"))
+        assertEquals("1,234.5678", groupThousands("1234.5678"))   // fractional part not grouped
+        assertEquals("-12,345", groupThousands("-12345"))
+        assertEquals("1,000.", groupThousands("1000."))           // trailing dot preserved
+        assertEquals("0", groupThousands("0"))
+        assertEquals("Error", groupThousands("Error"))
+        assertEquals("∞", groupThousands("∞"))
+        assertEquals("1.2345678E15", groupThousands("1.2345678E15")) // scientific untouched
     }
 
     @Test fun fmtEdgeCases() {
