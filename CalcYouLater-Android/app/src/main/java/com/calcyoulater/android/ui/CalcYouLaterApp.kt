@@ -1,6 +1,7 @@
 package com.calcyoulater.android.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,14 +21,26 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.utf16CodePoint
 import androidx.compose.ui.unit.dp
 import com.calcyoulater.android.CalcViewModel
+import com.calcyoulater.android.engine.KeyAction
+import com.calcyoulater.android.engine.keyActionForChar
 import com.calcyoulater.android.theme.AppearanceMode
 import com.calcyoulater.android.theme.CylPalette
 import com.calcyoulater.android.theme.LocalCylPalette
@@ -52,9 +65,22 @@ fun CalcYouLaterApp(vm: CalcViewModel) {
     var showHistory by remember { mutableStateOf(false) }
     var showConverter by remember { mutableStateOf(false) }
 
+    // Hardware-keyboard focus. The root holds focus so typed keys drive the calculator;
+    // when a bottom sheet with a text field is open we release it so the field gets input,
+    // then reclaim focus once both sheets close.
+    val keyFocus = remember { FocusRequester() }
+    LaunchedEffect(showHistory, showConverter) {
+        if (!showHistory && !showConverter) {
+            runCatching { keyFocus.requestFocus() }
+        }
+    }
+
     CompositionLocalProvider(LocalCylPalette provides palette) {
         Box(
             Modifier.fillMaxSize().background(palette.windowBackground).systemBarsPadding()
+                .focusRequester(keyFocus)
+                .onKeyEvent { handleCalcKey(vm, it) }
+                .focusable()
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val landscape = maxWidth > maxHeight
@@ -99,6 +125,32 @@ private fun PortraitLayout(vm: CalcViewModel, onHistory: () -> Unit, onConverter
             memoryHeight = 44.dp,
             modifier = Modifier.padding(bottom = 12.dp)
         )
+    }
+}
+
+/**
+ * Translate a physical key press into a calculator action. Returns true when consumed.
+ * Special keys are handled here; printable characters go through [keyActionForChar].
+ * Runs on key-down only so autorepeat still works but a press isn't counted twice.
+ *
+ * Note: Escape is intentionally NOT captured — on Android it falls back to Back/navigation,
+ * so hijacking it would fight platform convention. Clearing is done with the `c` key, which
+ * (like the on-screen C/AC button) clears the entry and, when pressed again, clears all.
+ */
+private fun handleCalcKey(vm: CalcViewModel, ev: KeyEvent): Boolean {
+    if (ev.type != KeyEventType.KeyDown) return false
+    when (ev.key) {
+        Key.Backspace, Key.Delete -> { vm.backspace(); return true }
+        Key.Enter, Key.NumPadEnter -> { vm.equals(); return true }
+    }
+    return when (val a = keyActionForChar(ev.utf16CodePoint.toChar())) {
+        is KeyAction.Digit -> { vm.digit(a.d); true }
+        KeyAction.Decimal -> { vm.decimal(); true }
+        is KeyAction.Op -> { vm.op(a.op); true }
+        KeyAction.Equals -> { vm.equals(); true }
+        KeyAction.Percent -> { vm.percent(); true }
+        KeyAction.Clear -> { vm.clear(); true }
+        null -> false
     }
 }
 

@@ -77,6 +77,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 - **Auto-fitting display** on Android — long results shrink to fit instead of being cut off, so every digit stays visible
 - **Tap the result to copy** — Android shows a "Copied" confirmation with a light haptic
 - **Keyboard-first on macOS** — every key you'd expect works
+- **Hardware-keyboard support on Android** — type with a Bluetooth keyboard, tablet, Chromebook, or DeX; input politely yields to the converter's text field when it's open
 - **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing; **long-press ⌫ on Android to clear everything (AC)**
 - **Haptic feedback on iOS & Android** — tactile response on every tap
 - **Screen-reader friendly on Android** — toolbar controls (appearance, history, converter, backspace) announce themselves to TalkBack
@@ -148,19 +149,23 @@ Theme is **persistent** across launches and always forces **dark mode**.
 
 ---
 
-## macOS Keyboard Shortcuts
+## Keyboard Shortcuts
+
+Works on **macOS** and on **Android** with a hardware keyboard (Bluetooth, tablets, Chromebooks, Samsung DeX).
 
 | Key | Action |
 |-----|--------|
 | `0` – `9` | Digits |
-| `+ - * /` | Operators |
+| `+ - * /` | Operators (`x` and `^` also work on Android for ×  and xʸ) |
 | `Enter` or `=` | Equals |
-| `.` | Decimal point |
-| `Delete` | Backspace |
-| `Esc` | Clear all |
+| `.` or `,` | Decimal point |
+| `Delete` / `Backspace` | Delete last digit |
 | `%` | Percent |
-| `c` / `C` | Clear |
-| Click result | Copy to clipboard |
+| `c` / `C` | Clear entry (press again to clear all) |
+| `Esc` | Clear all *(macOS)* — on Android, `Esc` is Back; use `c` twice |
+| Click / tap result | Copy to clipboard |
+
+On Android, typing goes to the calculator, but flows into the **converter's value field** when that sheet is open, then returns to the calculator when it closes.
 
 ---
 
