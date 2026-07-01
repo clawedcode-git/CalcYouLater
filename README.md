@@ -77,7 +77,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 - **Auto-fitting display** on Android — long results shrink to fit instead of being cut off, so every digit stays visible
 - **Tap the result to copy** — Android shows a "Copied" confirmation with a light haptic
 - **Keyboard-first on macOS** — every key you'd expect works
-- **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing
+- **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing; **long-press ⌫ on Android to clear everything (AC)**
 - **Haptic feedback on iOS & Android** — tactile response on every tap
 
 ### 🔬 Scientific Mode

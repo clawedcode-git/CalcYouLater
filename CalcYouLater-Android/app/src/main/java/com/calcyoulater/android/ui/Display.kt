@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Icon
@@ -48,6 +50,7 @@ fun Display(
     state: EngineState,
     fmt: (Double) -> String,
     onBackspace: () -> Unit,
+    onClearAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val p = CylTheme.palette
@@ -114,10 +117,18 @@ fun Display(
                 )
             }
             Box(Modifier.weight(1f))
-            BackspaceButton(p) {
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                onBackspace()
-            }
+            BackspaceButton(
+                p = p,
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onBackspace()
+                },
+                onLongClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    Toast.makeText(context, "Cleared", Toast.LENGTH_SHORT).show()
+                    onClearAll()
+                }
+            )
         }
     }
 }
@@ -172,19 +183,27 @@ private fun AutoSizeNumber(
     }
 }
 
-/** Small themed ⌫ affordance for correcting the current entry. */
+/**
+ * Small themed ⌫ affordance. Tap deletes the last digit; long-press clears everything (AC),
+ * mirroring the physical-calculator habit of holding backspace to wipe the entry.
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun BackspaceButton(p: com.calcyoulater.android.theme.CylPalette, onClick: () -> Unit) {
+private fun BackspaceButton(
+    p: com.calcyoulater.android.theme.CylPalette,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
+) {
     val shape: Shape = if (p.isNeonBlade) CornerCutShape(6f) else RoundedCornerShape(8.dp)
     var mod = Modifier.size(width = 48.dp, height = 32.dp)
         .clip(shape)
         .background(if (p.isNeonBlade) p.neonCyan.copy(alpha = 0.10f) else p.controlBackground, shape)
     if (p.isNeonBlade) mod = mod.border(1.dp, p.neonCyan.copy(alpha = 0.45f), shape)
-    mod = mod.clickable { onClick() }
+    mod = mod.combinedClickable(onClick = onClick, onLongClick = onLongClick)
     Box(mod, contentAlignment = Alignment.Center) {
         Icon(
             Icons.AutoMirrored.Filled.Backspace,
-            contentDescription = "Backspace",
+            contentDescription = "Backspace (long-press to clear all)",
             tint = if (p.isNeonBlade) p.neonCyan else p.secondaryText,
             modifier = Modifier.size(18.dp)
         )
