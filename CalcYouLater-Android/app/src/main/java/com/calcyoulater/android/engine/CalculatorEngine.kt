@@ -32,6 +32,22 @@ data class EngineState(
 enum class AngleMode { DEG, RAD }
 
 /**
+ * The full working state of the engine, including the private operand/operator bookkeeping.
+ * Captured/restored so an in-progress calculation survives an app restart. Distinct from
+ * [EngineState], which is only what the UI renders.
+ */
+data class EngineWorkState(
+    val display: String,
+    val expression: String,
+    val leftOperand: Double?,
+    val pendingOperator: String?,
+    val lastOperand: Double?,
+    val lastOperator: String?,
+    val shouldResetDisplay: Boolean,
+    val justEvaluated: Boolean
+)
+
+/**
  * Pure-Kotlin port of CalculatorEngine.swift. No Android / Compose dependencies,
  * so it is fully unit-testable on the JVM. The UI wraps this via a ViewModel and
  * reads [snapshot] after each mutating call.
@@ -298,6 +314,30 @@ class CalculatorEngine {
     fun restoreMemory(value: Double, has: Boolean) {
         memory = value
         hasMemory = has
+    }
+
+    /** Capture the full working state (for session persistence). */
+    fun workState(): EngineWorkState = EngineWorkState(
+        display = display,
+        expression = expression,
+        leftOperand = leftOperand,
+        pendingOperator = pendingOperator,
+        lastOperand = lastOperand,
+        lastOperator = lastOperator,
+        shouldResetDisplay = shouldResetDisplay,
+        justEvaluated = justEvaluated
+    )
+
+    /** Restore a working state captured by [workState] so a calculation resumes intact. */
+    fun restoreWorkState(s: EngineWorkState) {
+        display = s.display
+        expression = s.expression
+        leftOperand = s.leftOperand
+        pendingOperator = s.pendingOperator
+        lastOperand = s.lastOperand
+        lastOperator = s.lastOperator
+        shouldResetDisplay = s.shouldResetDisplay
+        justEvaluated = s.justEvaluated
     }
 
     // MARK: - Private

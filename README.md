@@ -80,6 +80,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 - **Hardware-keyboard support on Android** — type with a Bluetooth keyboard, tablet, Chromebook, or DeX; input politely yields to the converter's text field when it's open
 - **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing; **long-press ⌫ on Android to clear everything (AC)**
 - **Haptic feedback on iOS & Android** — tactile response on every tap
+- **Session restore on Android** — close the app mid-calculation and it comes back exactly where you left off, pending operator and all
 - **Screen-reader friendly on Android** — toolbar controls (appearance, history, converter, backspace) announce themselves to TalkBack
 
 ### 🔬 Scientific Mode

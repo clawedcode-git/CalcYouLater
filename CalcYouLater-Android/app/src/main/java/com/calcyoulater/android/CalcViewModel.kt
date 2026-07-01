@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.calcyoulater.android.engine.AngleMode
 import com.calcyoulater.android.engine.CalculatorEngine
 import com.calcyoulater.android.engine.EngineState
+import com.calcyoulater.android.engine.EngineWorkState
 import com.calcyoulater.android.engine.HistoryEntry
 import com.calcyoulater.android.theme.AppearanceMode
 import com.calcyoulater.android.theme.ThemeMode
@@ -32,6 +33,7 @@ private object Keys {
     val HAS_MEMORY = stringPreferencesKey("hasMemory")
     val HISTORY = stringPreferencesKey("history")
     val ANGLE = stringPreferencesKey("angleMode")
+    val WORKSTATE = stringPreferencesKey("workState")
 }
 
 /**
@@ -66,12 +68,16 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
             val hasMem = prefs[Keys.HAS_MEMORY] == "true"
             engine.restoreMemory(mem, hasMem)
             prefs[Keys.HISTORY]?.let { engine.loadHistory(decodeHistory(it)) }
+            prefs[Keys.WORKSTATE]?.let { decodeWorkState(it)?.let(engine::restoreWorkState) }
             loaded = true
             refresh()
         }
     }
 
-    private fun refresh() { state = engine.snapshot() }
+    private fun refresh() {
+        state = engine.snapshot()
+        persistWorkState()
+    }
 
     // ── Engine dispatch ──────────────────────────────────────────
     fun digit(d: String) { engine.inputDigit(d); refresh() }
@@ -142,6 +148,39 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
             getApplication<Application>().dataStore.edit { it[Keys.HISTORY] = json }
         }
     }
+
+    private fun persistWorkState() {
+        if (!loaded) return
+        val json = encodeWorkState(engine.workState())
+        viewModelScope.launch {
+            getApplication<Application>().dataStore.edit { it[Keys.WORKSTATE] = json }
+        }
+    }
+
+    private fun encodeWorkState(s: EngineWorkState): String = JSONObject().apply {
+        put("display", s.display)
+        put("expression", s.expression)
+        put("leftOperand", s.leftOperand ?: JSONObject.NULL)
+        put("pendingOperator", s.pendingOperator ?: JSONObject.NULL)
+        put("lastOperand", s.lastOperand ?: JSONObject.NULL)
+        put("lastOperator", s.lastOperator ?: JSONObject.NULL)
+        put("shouldResetDisplay", s.shouldResetDisplay)
+        put("justEvaluated", s.justEvaluated)
+    }.toString()
+
+    private fun decodeWorkState(s: String): EngineWorkState? = runCatching {
+        val o = JSONObject(s)
+        EngineWorkState(
+            display = o.optString("display", "0"),
+            expression = o.optString("expression", ""),
+            leftOperand = if (o.isNull("leftOperand")) null else o.getDouble("leftOperand"),
+            pendingOperator = if (o.isNull("pendingOperator")) null else o.getString("pendingOperator"),
+            lastOperand = if (o.isNull("lastOperand")) null else o.getDouble("lastOperand"),
+            lastOperator = if (o.isNull("lastOperator")) null else o.getString("lastOperator"),
+            shouldResetDisplay = o.optBoolean("shouldResetDisplay", false),
+            justEvaluated = o.optBoolean("justEvaluated", false)
+        )
+    }.getOrNull()
 
     private fun encodeHistory(entries: List<HistoryEntry>): String {
         val arr = JSONArray()
