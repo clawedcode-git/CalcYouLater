@@ -62,7 +62,12 @@ fun Toolbar(
                 AppearanceMode.DARK -> Icons.Filled.DarkMode
                 AppearanceMode.SYSTEM -> Icons.Filled.SettingsBrightness
             }
-            iconChip(icon, active = false) { appearanceMenu = true }
+            val appearanceLabel = when (vm.appearance) {
+                AppearanceMode.LIGHT -> "Appearance: light"
+                AppearanceMode.DARK -> "Appearance: dark"
+                AppearanceMode.SYSTEM -> "Appearance: system default"
+            }
+            iconChip(icon, active = false, contentDescription = appearanceLabel) { appearanceMenu = true }
             DropdownMenu(expanded = appearanceMenu, onDismissRequest = { appearanceMenu = false }) {
                 DropdownMenuItem(text = { Text("System Default") }, onClick = {
                     vm.changeAppearance(AppearanceMode.SYSTEM); appearanceMenu = false
@@ -82,8 +87,8 @@ fun Toolbar(
         Box(Modifier.weight(1f))
 
         textToggle("Sci", active = vm.isScientific) { vm.toggleScientific() }
-        iconChip(Icons.Filled.History, active = false) { onToggleHistory() }
-        iconChip(Icons.Filled.SwapHoriz, active = false) { onToggleConverter() }
+        iconChip(Icons.Filled.History, active = false, contentDescription = "Calculation history") { onToggleHistory() }
+        iconChip(Icons.Filled.SwapHoriz, active = false, contentDescription = "Unit converter") { onToggleConverter() }
     }
 }
 
@@ -112,7 +117,7 @@ private fun neonBladeToggle(vm: CalcViewModel) {
 }
 
 @Composable
-private fun iconChip(icon: ImageVector, active: Boolean, onClick: () -> Unit) {
+private fun iconChip(icon: ImageVector, active: Boolean, contentDescription: String, onClick: () -> Unit) {
     val p = CylTheme.palette
     val shape: Shape = if (p.isNeonBlade) CornerCutShape(6f) else RoundedCornerShape(6.dp)
     val bg = if (p.isNeonBlade) {
@@ -126,7 +131,7 @@ private fun iconChip(icon: ImageVector, active: Boolean, onClick: () -> Unit) {
     }
     mod = mod.clickable { onClick() }
     Box(mod, contentAlignment = Alignment.Center) {
-        Icon(icon, contentDescription = null,
+        Icon(icon, contentDescription = contentDescription,
             tint = if (p.isNeonBlade) (if (active) p.neonCyan else p.secondaryText) else p.primaryText,
             modifier = Modifier.size(16.dp))
     }

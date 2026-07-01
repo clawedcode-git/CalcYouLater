@@ -79,6 +79,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 - **Keyboard-first on macOS** — every key you'd expect works
 - **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing; **long-press ⌫ on Android to clear everything (AC)**
 - **Haptic feedback on iOS & Android** — tactile response on every tap
+- **Screen-reader friendly on Android** — toolbar controls (appearance, history, converter, backspace) announce themselves to TalkBack
 
 ### 🔬 Scientific Mode
 Toggle **Sci** to reveal 16 functions:
