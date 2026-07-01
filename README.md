@@ -100,6 +100,7 @@ Toggle **Sci** to reveal 16 functions:
 - Every calculation saved automatically (up to 200 entries)
 - **Tap any entry** to recall its result into the display
 - **Delete individual entries** (swipe on iOS/macOS · tap the **✕** on Android) · **Clear All** button
+- **Relative timestamps on Android** — recent entries read as "just now" / "5m ago" / "2h ago"; older ones show the date, so yesterday isn't confused with today
 - macOS: slide-in sidebar — iOS: native sheet — Android: bottom sheet
 
 ### ⇄ Unit Converter

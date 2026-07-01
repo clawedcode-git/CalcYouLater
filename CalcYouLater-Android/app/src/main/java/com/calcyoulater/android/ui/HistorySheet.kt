@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.calcyoulater.android.CalcViewModel
 import com.calcyoulater.android.engine.HistoryEntry
+import com.calcyoulater.android.engine.relativeTimeLabel
 import com.calcyoulater.android.theme.CylTheme
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -121,8 +122,12 @@ private fun HistoryRow(
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth()
             )
+            // Recent entries read as "5m ago"; older ones fall back to an absolute date so
+            // yesterday's 3:45 PM isn't confused with today's.
+            val stamp = relativeTimeLabel(System.currentTimeMillis(), entry.timestamp)
+                ?: dateFormat.format(Date(entry.timestamp))
             Text(
-                timeFormat.format(Date(entry.timestamp)),
+                stamp,
                 color = p.tertiaryText, fontSize = 10.sp,
                 fontFamily = if (p.isNeonBlade) FontFamily.Monospace else FontFamily.Default
             )
@@ -130,4 +135,4 @@ private fun HistoryRow(
     }
 }
 
-private val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+private val dateFormat = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
