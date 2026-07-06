@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
@@ -40,11 +39,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.content.Intent
 import android.widget.Toast
 import com.calcyoulater.android.engine.EngineState
 import com.calcyoulater.android.theme.CornerCutShape
 import com.calcyoulater.android.theme.CylTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Display(
     state: EngineState,
@@ -95,11 +96,21 @@ fun Display(
             fontFamily = if (mono) FontFamily.Monospace else FontFamily.Default,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-                    clipboard.setText(AnnotatedString(state.display))
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    Toast.makeText(context, "Copied ${state.display}", Toast.LENGTH_SHORT).show()
-                }
+                .combinedClickable(
+                    onClick = {
+                        clipboard.setText(AnnotatedString(state.display))
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        Toast.makeText(context, "Copied ${state.display}", Toast.LENGTH_SHORT).show()
+                    },
+                    onLongClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        val send = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, state.display)
+                        }
+                        context.startActivity(Intent.createChooser(send, "Share result"))
+                    }
+                )
         )
 
         // Memory indicator + backspace

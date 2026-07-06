@@ -75,7 +75,7 @@ A native calculator for **macOS, iOS/iPadOS, and Android** — scientific mode, 
 - Backspace, sign toggle, percentage
 - **Thousands separators** on Android — large numbers read as `1,234,567` (copy still yields the raw value)
 - **Auto-fitting display** on Android — long results shrink to fit instead of being cut off, so every digit stays visible
-- **Tap the result to copy** — Android shows a "Copied" confirmation with a light haptic
+- **Tap the result to copy** — Android shows a "Copied" confirmation with a light haptic; **long-press to share** it via Android's share sheet
 - **Keyboard-first on macOS** — every key you'd expect works
 - **Hardware-keyboard support on Android** — type with a Bluetooth keyboard, tablet, Chromebook, or DeX; input politely yields to the converter's text field when it's open
 - **On-screen ⌫ backspace** on iOS & Android — fix a wrong entry without clearing; **long-press ⌫ on Android to clear everything (AC)**
