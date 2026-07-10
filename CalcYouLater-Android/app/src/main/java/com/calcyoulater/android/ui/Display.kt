@@ -18,10 +18,15 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +57,7 @@ fun Display(
     fmt: (Double) -> String,
     onBackspace: () -> Unit,
     onClearAll: () -> Unit,
+    onPaste: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val p = CylTheme.palette
@@ -59,6 +65,20 @@ fun Display(
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
     val mono = p.isNeonBlade
+    var menuOpen by remember { mutableStateOf(false) }
+
+    fun copyDisplay() {
+        clipboard.setText(AnnotatedString(state.display))
+        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+        Toast.makeText(context, "Copied ${state.display}", Toast.LENGTH_SHORT).show()
+    }
+    fun shareDisplay() {
+        val send = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, state.display)
+        }
+        context.startActivity(Intent.createChooser(send, "Share result"))
+    }
 
     var container = modifier.fillMaxWidth()
     if (p.isNeonBlade) {
@@ -89,29 +109,41 @@ fun Display(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Main number — auto-shrinks to fit (no ellipsis); tap to copy the raw value
-        AutoSizeNumber(
-            text = com.calcyoulater.android.engine.groupThousands(state.display),
-            color = p.primaryText,
-            fontFamily = if (mono) FontFamily.Monospace else FontFamily.Default,
-            modifier = Modifier
-                .fillMaxWidth()
-                .combinedClickable(
-                    onClick = {
-                        clipboard.setText(AnnotatedString(state.display))
-                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                        Toast.makeText(context, "Copied ${state.display}", Toast.LENGTH_SHORT).show()
-                    },
-                    onLongClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        val send = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, state.display)
+        // Main number — auto-shrinks to fit (no ellipsis). Tap copies the raw value;
+        // long-press opens a Paste / Copy / Share menu (the display isn't a text field,
+        // so this is how a clipboard value gets pasted in).
+        Box(Modifier.fillMaxWidth()) {
+            AutoSizeNumber(
+                text = com.calcyoulater.android.engine.groupThousands(state.display),
+                color = p.primaryText,
+                fontFamily = if (mono) FontFamily.Monospace else FontFamily.Default,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { copyDisplay() },
+                        onLongClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            menuOpen = true
                         }
-                        context.startActivity(Intent.createChooser(send, "Share result"))
-                    }
+                    )
+            )
+            DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                val clip = clipboard.getText()?.text
+                DropdownMenuItem(
+                    text = { Text("Paste") },
+                    enabled = clip != null,
+                    onClick = { clip?.let { onPaste(it.toString()) }; menuOpen = false }
                 )
-        )
+                DropdownMenuItem(
+                    text = { Text("Copy") },
+                    onClick = { copyDisplay(); menuOpen = false }
+                )
+                DropdownMenuItem(
+                    text = { Text("Share") },
+                    onClick = { shareDisplay(); menuOpen = false }
+                )
+            }
+        }
 
         // Memory indicator + backspace
         Row(

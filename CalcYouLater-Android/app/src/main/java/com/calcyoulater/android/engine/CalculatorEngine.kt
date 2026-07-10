@@ -235,6 +235,27 @@ class CalculatorEngine {
         }
     }
 
+    /**
+     * Paste an external number into the display (e.g. from the clipboard). Strips thousands
+     * separators and whitespace, and silently ignores anything that isn't a finite number.
+     * Behaves like entering a fresh operand, so a pending operator still applies on the next
+     * `=`, and a value pasted right after `=` starts a new calculation.
+     */
+    fun paste(text: String) {
+        val cleaned = text.replace(",", "").filterNot { it.isWhitespace() }
+        val value = cleaned.toDoubleOrNull() ?: return
+        if (!value.isFinite()) return
+        if (justEvaluated) {
+            leftOperand = null
+            pendingOperator = null
+            lastOperand = null
+            lastOperator = null
+            justEvaluated = false
+        }
+        display = fmt(value)
+        shouldResetDisplay = false
+    }
+
     // MARK: - Scientific
 
     fun applyScientific(fn: String) {

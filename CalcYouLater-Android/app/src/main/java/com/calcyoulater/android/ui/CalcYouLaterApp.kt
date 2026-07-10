@@ -33,10 +33,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.key.utf16CodePoint
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.calcyoulater.android.CalcViewModel
 import com.calcyoulater.android.engine.KeyAction
@@ -74,12 +78,28 @@ fun CalcYouLaterApp(vm: CalcViewModel) {
             runCatching { keyFocus.requestFocus() }
         }
     }
+    val clipboard = LocalClipboardManager.current
 
     CompositionLocalProvider(LocalCylPalette provides palette) {
         Box(
             Modifier.fillMaxSize().background(palette.windowBackground).systemBarsPadding()
                 .focusRequester(keyFocus)
-                .onKeyEvent { handleCalcKey(vm, it) }
+                .onKeyEvent { ev ->
+                    // Ctrl/Cmd+V pastes a clipboard number; Ctrl/Cmd+C copies the display.
+                    if (ev.type == KeyEventType.KeyDown && (ev.isCtrlPressed || ev.isMetaPressed)) {
+                        when (ev.key) {
+                            Key.V -> {
+                                clipboard.getText()?.text?.let { vm.paste(it.toString()) }
+                                return@onKeyEvent true
+                            }
+                            Key.C -> {
+                                clipboard.setText(AnnotatedString(vm.state.display))
+                                return@onKeyEvent true
+                            }
+                        }
+                    }
+                    handleCalcKey(vm, ev)
+                }
                 .focusable()
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -113,7 +133,7 @@ fun CalcYouLaterApp(vm: CalcViewModel) {
 private fun PortraitLayout(vm: CalcViewModel, onHistory: () -> Unit, onConverter: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(horizontal = 12.dp)) {
         Toolbar(vm, onHistory, onConverter)
-        Display(vm.state, vm::fmt, vm::backspace, vm::allClear, Modifier.padding(top = 6.dp, bottom = 4.dp))
+        Display(vm.state, vm::fmt, vm::backspace, vm::allClear, vm::paste, Modifier.padding(top = 6.dp, bottom = 4.dp))
         if (vm.isScientific) {
             ScientificKeypad(vm, buttonHeight = 44.dp, modifier = Modifier.padding(vertical = 8.dp))
         }
@@ -161,7 +181,7 @@ private fun LandscapeLayout(vm: CalcViewModel, onHistory: () -> Unit, onConverte
         Row(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Display(vm.state, vm::fmt, vm::backspace, vm::allClear)
+                Display(vm.state, vm::fmt, vm::backspace, vm::allClear, vm::paste)
             }
             if (vm.isScientific) {
                 Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()),

@@ -89,6 +89,7 @@ class CalcViewModel(app: Application) : AndroidViewModel(app) {
     fun allClear() { engine.allClear(); refresh() }
     fun toggleSign() { engine.toggleSign(); refresh() }
     fun percent() { engine.percent(); refresh() }
+    fun paste(text: String) { engine.paste(text); refresh() }
     fun scientific(fn: String) { engine.applyScientific(fn); refresh(); persistHistory() }
     fun constant(c: String) { engine.inputConstant(c); refresh() }
     fun memoryClear() { engine.memoryClear(); refresh(); persistMemory() }
